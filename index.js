@@ -40,12 +40,19 @@ async function setupBullBoard() {
   // Server configuration
   const app = express();
   app.use("/admin/queues", serverAdapter.getRouter());
-  app.get("/queue/execute", async () => setupQueues());
+  app.get("/queue/execute", async (req, res) => {
+    await setupQueues();
+    res.status(200).json({ message: "Queues being processed!" });
+  });
   const PORT = 3000;
   app.listen(PORT, () => {
     console.info(`Running on ${PORT}...`);
-    console.info(`Open http://localhost:${PORT}/admin/queues to see the Bull Board`);
-    console.info(`Open http://localhost:${PORT}/queue/execute to execute the queues`);
+    console.info(
+      `Open http://localhost:${PORT}/admin/queues to see the Bull Board`
+    );
+    console.info(
+      `Open http://localhost:${PORT}/queue/execute to execute the queues`
+    );
   });
 }
 
